@@ -1,17 +1,18 @@
 import './Form.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { addUser, updateUser } from './features/crudSlice';
+import { addUserData, updateUserData } from './features/crudSlice';
 import { useEffect, useState } from 'react';
 
 const Form = () => {
   const dispatch = useDispatch();
 
   const initialUpdate = useSelector(state => state.inputFormUpdate)
-  const [user, setUser] = useState({id:'',name:'',phone:'',email:''});
-
+  const [user, setUser] = useState({_id:'',name:'',phone:'',email:''});
 
   useEffect(()=>{
-    if(initialUpdate) setUser(initialUpdate)
+    if(initialUpdate) {
+      setUser(initialUpdate)
+    }
   },[initialUpdate])
 
   const handleInput = (event) => {
@@ -22,13 +23,15 @@ const Form = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if(user.id){
-      dispatch(updateUser(user))
+    console.log(user._id)
+    if(user._id){
+      dispatch(updateUserData(user))
+      console.log(user)
     }
     else {
-      dispatch(addUser(user))
+      dispatch(addUserData(user))
     }
-    setUser({ id: '', name: '', phone: '', email: '' })
+    setUser({_id:'',name:'',phone:'',email:''})
   }
 
   return (
@@ -45,7 +48,7 @@ const Form = () => {
         </label>
         <label className='label'>Phone :
           <input
-            type="number"
+            type="text"
             name="phone"
             placeholder='Phone Number'
             value={user.phone}
@@ -61,7 +64,7 @@ const Form = () => {
             onChange={handleInput}
           />
         </label>
-        <button className='submit-bttn' onClick={handleSubmit} >{user.id ? "Update" : "Submit"}</button>
+        <button className='submit-bttn' onClick={handleSubmit} >{user._id? "Update" : "Submit"}</button>
       </form>
     </>
   );

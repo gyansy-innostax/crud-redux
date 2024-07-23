@@ -1,13 +1,22 @@
 import './SavedData.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeUser, updateInitial } from './features/crudSlice';
+import { fetchedAllData, updateInitial, deleteUsersData } from './features/crudSlice';
 import { MdDeleteForever } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
+import { useEffect } from 'react';
 
 const SavedData = () => {
-    const usersData = useSelector(state => state.userData);
     const dispatch = useDispatch();
+    
+    useEffect(()=>{
+        dispatch(fetchedAllData());
+    },[])
 
+    const usersData = useSelector(state => state.userData);
+
+    const handleDelete = (user) => {
+        dispatch(deleteUsersData(user));
+    }
 
     return (
         <>
@@ -34,14 +43,14 @@ const SavedData = () => {
                                     <MdDeleteForever
                                         size="1.6rem"
                                         cursor="pointer"
-                                        onClick={() => dispatch(removeUser(user))}
+                                        onClick={() => handleDelete(user)}
                                     />
                                 </td>
                                 <td>
                                     <FaEdit
                                         size="1.3rem"
                                         cursor="pointer"
-                                        onClick={() => dispatch(updateInitial(user))}
+                                        onClick={()=> dispatch(updateInitial(user))}
                                     />
                                 </td>
                             </tr>
